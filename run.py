@@ -58,7 +58,7 @@ def get_last_updated():
 st.set_page_config(layout="wide", page_title="Upcoming Shows")
 st.title("Upcoming Shows")
 st.caption("Live scraped from Eli's Mile High Club, Thee Stork Club, 924 Gilman.")
-
+st.caption("See ya in the crowd! 📸 @jimmyhadalittlelamb")
 # Controls
 col1, col2 = st.columns([4, 1])
 with col1:
