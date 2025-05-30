@@ -61,7 +61,7 @@ def enrich_missing_band(band_name, bandcamp_df, csv_path="bandcamp.csv"):
     bandcamp_df.to_csv(csv_path, index=False)
     return new_row, bandcamp_df
 
-def enrich(df, bandcamp_lookup, csv_path="bandcamp.csv"):
+def enrich(df, bandcamp_lookup, csv_path="bandcamp.csv", progress_callback=None):
     """
     Enriches the 'More Info' column of the DataFrame with Bandcamp info.
     If info is missing, it scrapes Bandcamp and updates bandcamp.csv.
@@ -103,10 +103,15 @@ def enrich(df, bandcamp_lookup, csv_path="bandcamp.csv"):
             f"\nLocation: {band_info.get('location', '') or 'N/A'}"
         )
 
+    total = len(df)
     for idx, row in df.iterrows():
+        if progress_callback:
+            progress_callback(idx + 1, total, row.get("Headliner", "Unknown"))
+
         enrichments = ""
         for col in ["Headliner", "Supporting Band 1", "Supporting Band 2", "Supporting Band 3"]:
             enrichments += enrich_band_info(row.get(col, ""))
         df.at[idx, "More Info"] = (row.get("More Info", "") or "") + enrichments
+
 
     return df
